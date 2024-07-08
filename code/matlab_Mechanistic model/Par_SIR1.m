@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%ÏÂÔØ¹¤×÷ÇøShanghaiMCMC_history.mat£¬È»ºóÔËĞĞ´Ë³ÌĞò
+%ä¸‹è½½å·¥ä½œåŒºShanghaiMCMC_history.matï¼Œç„¶åè¿è¡Œæ­¤ç¨‹åº
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clear all
@@ -15,12 +15,12 @@ data1(1,:)=0:length(Dat_hospital(Num1:Num2))-1;
 data1(2,:)=Dat_hospital(Num1:Num2);
 
 
-Sr0_total=24750000;%×ÜÈË¿Ú
-R0=0;%³õÊ¼»Ö¸´Õß
+Sr0_total=24750000;%æ€»äººå£
+R0=0;%åˆå§‹æ¢å¤è€…
 par2=[Sr0_total R0];
 %%
-%Çó½â×îÓÅ²ÎÊı
-%        %   beta    ¦Ã     k      I0    Se0
+%æ±‚è§£æœ€ä¼˜å‚æ•°
+%        %   beta    Î³     k      I0    Se0
 % par1guess=[0.5         0.3    10    3000];   
 %        lb=[0.1         0.01   1     2000]; 
 %        ub=[1           1      100   400000];
@@ -42,10 +42,10 @@ ydata=[(1:129)',data1(2,:)'];ylabels={'time','newly_infected'};
 zdata=par2';zlabels={'par2'};
 data=struct('ydata',ydata,'zdata',zdata);
 
-model.ssfun = @kuzdist;%ËÆÈ»º¯Êı
+model.ssfun = @kuzdist;%ä¼¼ç„¶å‡½æ•°
 
 
-options.nsimu = 300000;%Éú³ÉµÄ²ÎÊıÁ´¸öÊı
+options.nsimu = 300000;%ç”Ÿæˆçš„å‚æ•°é“¾ä¸ªæ•°
 [results, chain, s2chain]= mcmcrun(model,data,params,options);
 options.nsimu = 50000;
 [results, chain, s2chain] = mcmcrun(model,data,params,options, results);
@@ -55,7 +55,7 @@ options.nsimu = 50000;
 options.nsimu = 50000;
 [results, chain, s2chain] = mcmcrun(model,data,params,options, results);
 
-%²ÎÊıºóÑé·Ö²¼
+%å‚æ•°åéªŒåˆ†å¸ƒ
 figure
 mcmcplot(chain,[],results,'pairs');
 figure
@@ -64,19 +64,19 @@ mcmcplot(chain,[],results,'denspanel',2);
 
 
 %%
-%ps:µÚÒ»ÁĞÎª²ÎÊı¹À¼Æ½á¹û,pCI:²ÎÊıÖÃĞÅÇø¼ä
+%ps:ç¬¬ä¸€åˆ—ä¸ºå‚æ•°ä¼°è®¡ç»“æœ,pCI:å‚æ•°ç½®ä¿¡åŒºé—´
 ps=chainstats(chain,results)
-%ÖÃĞÅÇø¼ä£º¾ùÖµ+-95%·ÖÎ»Êı*±ê×¼²î¡£Ğ¡Ñù±¾£¨<30£©:ÓÃt·Ö²¼ÇóÖÃĞÅÇø¼ä£»´óÑù±¾£¬ÓÃÕıÌ¬·Ö²¼95%·ÖÎ»ÊıÇóÖÃĞÅÇø¼ä¼´1.96
+%ç½®ä¿¡åŒºé—´ï¼šå‡å€¼+-95%åˆ†ä½æ•°*æ ‡å‡†å·®ã€‚å°æ ·æœ¬ï¼ˆ<30ï¼‰:ç”¨tåˆ†å¸ƒæ±‚ç½®ä¿¡åŒºé—´ï¼›å¤§æ ·æœ¬ï¼Œç”¨æ­£æ€åˆ†å¸ƒ95%åˆ†ä½æ•°æ±‚ç½®ä¿¡åŒºé—´å³1.96
 pCI=[ps(1,1)-1.96*ps(1,2) ps(1,1)+1.96*ps(1,2);ps(2,1)-1.96*ps(2,2) ps(2,1)+1.96*ps(2,2);
     ps(3,1)-1.96*ps(3,2) ps(3,1)+1.96*ps(3,2);ps(4,1)-1.96*ps(4,2) ps(4,1)+1.96*ps(4,2)];
 
-%²ÎÊı¹À¼Æ½á¹û¼°ÆäÖÃĞÅÇø¼ä
+%å‚æ•°ä¼°è®¡ç»“æœåŠå…¶ç½®ä¿¡åŒºé—´
 bestpar1=[ps(:,1),pCI ]
 
 
 
 %%
-%Sr,Se,I,R,NIµÄÖÃĞÅÇø¼ä
+%Sr,Se,I,R,NIçš„ç½®ä¿¡åŒºé—´
 dataSe=zeros(129,49300);dataI=zeros(129,49300);dataR=zeros(129,49300);dataNI=zeros(128,49300);%dataSr=zeros(129,49300);
 for i=700:50000
 par1=chain(i,:);
@@ -102,7 +102,7 @@ mNI=mean(dataNI,2);sNI=std(dataNI,0,2);UconfNI=mNI+1.96.*sNI;LconfNI=mNI-1.96.*s
 mSr=mean(dataSr,2);sSr=std(dataSr,0,2);UconfSr=mSr+1.96.*sSr;LconfSr=mSr-1.96.*sSr;
 
 %%
-%Í¼4
+%å›¾4
 par1=bestpar1(:,1);
 X0=[par1(4),par1(3),par2(2),5,par2(1)-par1(4)];
 [t,x]=ode45(@SIRmodel,1:0.1:129,X0,[],par1,par2);
@@ -112,7 +112,7 @@ figure
 subplot(4,2,[1 2])
 aaa=1:128;
 FNI=[5.0, 1.0916028, 1.4361897, 1.8895411, 2.486003, 3.2707539, 4.303029, 5.661455, 7.447878, 9.799267, 12.890148, 16.959621, 22.308517, 29.344719, 38.605568, 50.763824, 66.77243, 87.81406, 115.4144, 151.74075, 199.43817, 261.87213, 343.86328, 451.34863, 591.47485, 774.4226, 1013.24854, 1322.0635, 1720.6978, 2234.1206, 2888.4365, 3711.1445, 4742.8086, 6010.617, 7534.5723, 9324.801, 11385.852, 13651.969, 16041.859, 18462.312, 20744.68, 22766.742, 24431.453, 25646.594, 26385.734, 26660.672, 26529.61, 26059.812, 25318.562, 24371.219, 23280.656, 22100.375, 20858.344, 19581.094, 18295.469, 17019.562, 15766.5625, 14553.656, 13384.406, 12262.0625, 11190.0, 10171.375, 9209.875, 8307.5, 7469.1875, 6695.5625, 5986.5625, 5341.8125, 4761.25, 4244.8125, 3795.4375, 3402.3125, 3056.375, 2752.25, 2484.5, 2247.9375, 2037.6875, 1853.125, 1685.9375, 1533.875, 1395.9375, 1271.25, 1159.0625, 1058.4375, 968.5625, 888.4375, 817.3125, 751.625, 690.4375, 634.4375, 583.3125, 536.6875, 494.1875, 455.375, 419.875, 387.5, 357.5, 329.9375, 304.5, 281.125, 259.6875, 240.0, 222.0, 205.5625, 190.3125, 176.25, 163.125, 151.0625, 139.875, 129.625, 120.0625, 111.3125, 103.1875, 95.8125, 88.875, 82.5, 76.5, 71.0, 65.8125, 61.125, 56.6875, 52.625, 48.875, 45.4375, 42.1875, 39.1875, 36.4375, 33.8125, 31.4375];
-fill([aaa fliplr(aaa)],[UconfNI' fliplr(LconfNI')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ÖĞ±ØĞë¶¼ÎªĞĞÏòÁ¿
+fill([aaa fliplr(aaa)],[UconfNI' fliplr(LconfNI')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ä¸­å¿…é¡»éƒ½ä¸ºè¡Œå‘é‡
 hold on
 newly_infected=x(11:end,4)-x(1:1271,4);%diff(x(:,4));
 plot(1:0.1:128,newly_infected,'b-','LineWidth',2)
@@ -159,7 +159,7 @@ grid minor
 subplot(425)
 FSr=[2.435e7, 2.4349994e7, 2.4349988e7, 2.434998e7, 2.4349974e7, 2.4349966e7, 2.4349958e7, 2.434995e7, 2.434994e7, 2.4349932e7, 2.434992e7, 2.4349908e7, 2.4349892e7, 2.4349874e7, 2.434985e7, 2.4349822e7, 2.4349784e7, 2.4349736e7, 2.4349674e7, 2.4349594e7, 2.434949e7, 2.4349354e7, 2.4349176e7, 2.4348946e7, 2.4348644e7, 2.4348252e7, 2.4347742e7, 2.434708e7, 2.4346222e7, 2.4345112e7, 2.434368e7, 2.4341846e7, 2.43395e7, 2.4336518e7, 2.4332762e7, 2.4328074e7, 2.4322276e7, 2.4315204e7, 2.4306706e7, 2.4296662e7, 2.428501e7, 2.4271756e7, 2.4256986e7, 2.4240852e7, 2.4223582e7, 2.4205468e7, 2.4186806e7, 2.4167894e7, 2.414904e7, 2.4130538e7, 2.411263e7, 2.4095516e7, 2.4079368e7, 2.4064316e7, 2.405046e7, 2.4037858e7, 2.4026544e7, 2.401652e7, 2.4007776e7, 2.4000286e7, 2.3994002e7, 2.3988862e7, 2.398479e7, 2.3981704e7, 2.397952e7, 2.3978094e7, 2.3977222e7, 2.3976636e7, 2.3976008e7, 2.3974952e7, 2.3973404e7, 2.3971504e7, 2.3969316e7, 2.3966892e7, 2.3964286e7, 2.3961536e7, 2.395868e7, 2.3955738e7, 2.3952744e7, 2.3949728e7, 2.3946718e7, 2.3943734e7, 2.3940792e7, 2.3937902e7, 2.3935068e7, 2.3932286e7, 2.3929552e7, 2.3926872e7, 2.3924266e7, 2.3921732e7, 2.3919276e7, 2.39169e7, 2.3914604e7, 2.3912386e7, 2.3910244e7, 2.3908178e7, 2.390619e7, 2.3904278e7, 2.3902444e7, 2.3900686e7, 2.3899002e7, 2.3897392e7, 2.389585e7, 2.3894372e7, 2.389296e7, 2.389161e7, 2.3890322e7, 2.3889094e7, 2.3887926e7, 2.3886816e7, 2.3885758e7, 2.3884754e7, 2.38838e7, 2.3882894e7, 2.3882034e7, 2.3881218e7, 2.3880446e7, 2.3879714e7, 2.3879022e7, 2.3878368e7, 2.3877752e7, 2.3877168e7, 2.3876618e7, 2.3876098e7, 2.3875608e7, 2.3875146e7, 2.387471e7, 2.3874302e7, 2.3873916e7, 2.3873554e7];
 aa=1:129;
-fill([aa fliplr(aa)],[UconfSr' fliplr(LconfSr')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ÖĞ±ØĞë¶¼ÎªĞĞÏòÁ¿
+fill([aa fliplr(aa)],[UconfSr' fliplr(LconfSr')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ä¸­å¿…é¡»éƒ½ä¸ºè¡Œå‘é‡
 hold on
 plot(1:0.1:129,x(:,5),'b-',1:129,FSr(2:130),'r--','LineWidth',2)
 legend({'95% CI','Mechanistic model','UDE model'});ylabel('Sr(t)');xlabel('Date(days)')
@@ -175,7 +175,7 @@ subplot(426)
 aa=1:129;
 FSe=[400000.0, 400004.25, 400009.2, 400014.28, 400019.2, 400023.62, 400027.3, 400030.0, 400031.47, 400031.4, 400029.44, 400025.2, 400018.03, 400007.22, 399991.7, 399970.06, 399940.5, 399900.6, 399847.1, 399775.72, 399680.84, 399555.06, 399388.6, 399168.47, 398878.12, 398495.7, 397992.53, 397332.66, 396469.88, 395345.47, 393887.8, 392012.34, 389615.47, 386585.4, 382807.28, 378171.5, 372583.5, 366004.28, 358459.16, 350039.84, 340947.84, 331434.53, 321774.47, 312261.53, 303144.53, 294598.66, 286732.03, 279582.6, 273118.25, 267248.5, 261877.39, 256890.36, 252180.3, 247649.95, 243211.9, 238793.95, 234342.7, 229812.58, 225171.38, 220400.42, 215494.48, 210461.97, 205324.44, 200102.56, 194818.16, 189548.81, 184434.64, 179678.25, 175544.8, 172355.28, 170108.39, 168605.72, 167738.28, 167408.72, 167531.38, 168032.27, 168850.02, 169938.89, 171247.89, 172729.8, 174343.92, 176056.1, 177838.67, 179670.53, 181537.06, 183430.17, 185348.1, 187275.05, 189192.45, 191090.95, 192962.84, 194802.14, 196604.55, 198367.45, 200089.56, 201767.94, 203399.11, 204980.42, 206510.0, 207986.8, 209410.53, 210781.75, 212101.81, 213372.88, 214595.58, 215768.95, 216893.33, 217969.27, 218997.56, 219979.28, 220915.72, 221808.45, 222659.25, 223470.02, 224241.61, 224975.02, 225671.34, 226331.8, 226957.62, 227550.16, 228110.81, 228641.1, 229142.55, 229616.81, 230064.86, 230487.67, 230886.4, 231262.22, 231616.23, 231949.56];
 
-fill([aa fliplr(aa)],[UconfSe' fliplr(LconfSe')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ÖĞ±ØĞë¶¼ÎªĞĞÏòÁ¿
+fill([aa fliplr(aa)],[UconfSe' fliplr(LconfSe')],fillcolor,'edgealpha',0,'facealpha',0.7);%[]ä¸­å¿…é¡»éƒ½ä¸ºè¡Œå‘é‡
 hold on 
 plot(1:0.1:129,x(:,1),'b-','LineWidth',2)
 plot(aa,FSe(2:end),'r--','LineWidth',2)
@@ -227,27 +227,27 @@ grid minor
 
 
 %%
-%½»²æÑéÖ¤Í¼5£¬±í2
+%äº¤å‰éªŒè¯å›¾5ï¼Œè¡¨2
 r0=[ 2.2 5 8.2 ];%8.2
 %r0=[2 2.445 3.5];%r0=beta/gamma=0.489/0.2,[2,5]
 k=[ 0.15 0.2812  0.4 ];
 
-n=200;m=length(1:0.1:n);%½â·½³Ì³¤¶È
-nn1=120;mm1=length(1:0.1:nn1);%µÚÒ»ÁĞ»­Í¼³¤¶È
-nn2=100;mm2=length(1:0.1:nn2);%µÚ¶şÁĞ»­Í¼³¤¶È
-nn3=80;mm3=length(1:0.1:nn3);%µÚÈıÁĞ»­Í¼³¤¶È
+n=200;m=length(1:0.1:n);%è§£æ–¹ç¨‹é•¿åº¦
+nn1=120;mm1=length(1:0.1:nn1);%ç¬¬ä¸€åˆ—ç”»å›¾é•¿åº¦
+nn2=100;mm2=length(1:0.1:nn2);%ç¬¬äºŒåˆ—ç”»å›¾é•¿åº¦
+nn3=80;mm3=length(1:0.1:nn3);%ç¬¬ä¸‰åˆ—ç”»å›¾é•¿åº¦
 nnd=[nn1 nn2 nn3];mmd=[mm1 mm2 mm3];
 dataSr=zeros(m,9);dataSe=zeros(m,9);dataI=zeros(m,9);dataR=zeros(m,9);dataRt=zeros(m,9);dataNI=zeros(m-10,9);
 name={'(a) Wild type (R_0=2.2)','(b) Delta variant (R_0=5)','(c) Omicron variant (R_0=8.2)','(d)','(e)','(f)','(g)','(h)',...
     '(i)','(j)','(k)','(l)','(m)','(n)','(o)'};
 
-name1={'k=0.15','k=0.0.2812','k=0.4','Model (1)','R_t=1'};
+name1={'k=0.15','k=0.2812','k=0.4','Model (1)','R_t=1'};
 Model1=zeros(m,1);Model1NI=zeros(m-10,1);MmdatacumIrate=zeros(1,9);M1datacumIrate=zeros(1,3);M1dataRt=zeros(m,3);
 
-figure  %½»²æÑéÖ¤Í¼5
+figure  %äº¤å‰éªŒè¯å›¾5
 for i=1:3
    gamma=1/5;par1=bestpar1(:,1);
-    par1(1)=r0(i)*gamma;%par1£º beta        k      I0    Se0
+    par1(1)=r0(i)*gamma;%par1ï¼š beta        k      I0    Se0
    
     for j=1:3
         par1(2)=k(j);
@@ -257,17 +257,17 @@ for i=1:3
         dataR(:,j+3*(i-1))=x(:,3);dataRt(:,j+3*(i-1))=5*par1(1).*x(:,1)./(x(:,1)+x(:,2)+x(:,3));dataNI(:,j+3*(i-1))=x(11:end,4)-x(1:m-10,4);
         for z=1:(m-1)
             if floor(dataRt(z,j+3*(i-1)))==1 && floor(dataRt(z+1,j+3*(i-1)))==0
-                MmdatacumIrate(1,j+3*(i-1))=(x(z,4)/Sr0_total)*100;%Rt=1Ê±Mechanism modelµÄÀÛ¼Æ¸ĞÈ¾ÂÊ%
+                MmdatacumIrate(1,j+3*(i-1))=(x(z,4)/Sr0_total)*100;%Rt=1æ—¶Mechanism modelçš„ç´¯è®¡æ„ŸæŸ“ç‡%
             end
         end
     end
    %Model 1
      XX0=[par2(1),par1(3),par2(2),5];
-     [t,xx]=ode45(@SIRmodel1,1:0.1:n,XX0,[],par1,par2);%Model 1 Î´ÓÃµ½par1(2)£¬ËùÒÔÕâÀïÖ±½Ó·Åpar1ÎŞÓ°Ïì
+     [t,xx]=ode45(@SIRmodel1,1:0.1:n,XX0,[],par1,par2);%Model 1 æœªç”¨åˆ°par1(2)ï¼Œæ‰€ä»¥è¿™é‡Œç›´æ¥æ”¾par1æ— å½±å“
      Model1=[Model1 xx(:,1:3)];Model1NI=[Model1NI (xx(11:end,4)-xx(1:m-10,4))];M1dataRt(:,i)=5*par1(1).*xx(:,1)./(xx(:,1)+xx(:,2)+xx(:,3));
      for z=1:(m-1)
             if floor(M1dataRt(z,i))==1 && floor(M1dataRt(z+1,i))==0
-                M1datacumIrate(1,i)=(xx(z,4)/Sr0_total)*100;%Rt=1Ê±Model1µÄÀÛ¼Æ¸ĞÈ¾ÂÊ%
+                M1datacumIrate(1,i)=(xx(z,4)/Sr0_total)*100;%Rt=1æ—¶Model1çš„ç´¯è®¡æ„ŸæŸ“ç‡%
             end
      end
 
@@ -322,7 +322,7 @@ end
 grid on
 grid minor
 end
-%·Å´óÍ¼
+%æ”¾å¤§å›¾
 axes('Position',[0.15 0.48 0.07 0.07]);
 plot(1:0.1:nnd(1),dataI(1:mmd(1),1:3),'LineWidth',1.5);
 grid on
@@ -332,12 +332,12 @@ plot(1:0.1:nnd(1),dataR(1:mmd(1),1:3),'LineWidth',1.5);
 grid on
 grid minor
 
-%±í2
+%è¡¨2
 Model1(:,1)=[];Model1NI(:,1)=[];
 %Mechanistic model
 final_size=dataR(end,:);attack_rate=final_size./Sr0_total;
 peak_size=max(dataI,[],1);peak_size_rate=max(dataI,[],1)./Sr0_total;
-peak_sizeNI=max(dataNI,[],1);peak_sizeNI_rate=max(dataNI,[],1)./Sr0_total;%·µ»ØÃ¿ÁĞ×î´óÖµ
+peak_sizeNI=max(dataNI,[],1);peak_sizeNI_rate=max(dataNI,[],1)./Sr0_total;%è¿”å›æ¯åˆ—æœ€å¤§å€¼
 Sr_inf=dataSr(end,:);
 
 Mmfinal_size=[0 r0; k' final_size(1:3)' final_size(4:6)' final_size(7:9)' ]'./10^6
@@ -351,7 +351,7 @@ MmdatacumIrate=[0 r0; k' MmdatacumIrate(1:3)' MmdatacumIrate(4:6)' MmdatacumIrat
 %Model1
 M1final_size=Model1(end,[3 6 9])./10^6
 M1attack_rate=(Model1(end,[3 6 9])./Sr0_total).*10^2
-M1peak_size=max(Model1(:,[2 5 8]),[],1)./10^6%·µ»ØÃ¿ÁĞ×î´óÖµ
+M1peak_size=max(Model1(:,[2 5 8]),[],1)./10^6%è¿”å›æ¯åˆ—æœ€å¤§å€¼
 M1peak_size_rate=(max(Model1(:,[2 5 8]),[],1)./Sr0_total).*10^2
 M1peak_sizeNI=max(Model1NI,[],1)./10^6.
 M1peak_sizeNI_rate=(max(Model1NI,[],1)./Sr0_total).*10^2
@@ -360,8 +360,8 @@ M1Sr_inf=Model1(end,[1 4 7])./10^6
 
 
 %%
-%Í¼6  ¶Ô±ÈÍ¼
-r0_6=round(1.5:0.1:10,2);k=[ 0.15 0.2812  0.4 ];
+%å›¾6  å¯¹æ¯”å›¾
+r0_6=round(1.4:0.1:10,2);k=[ 0.15 0.2812  0.4 ];
 %Mechanistic model
 dataI_6=zeros(m,length(r0_6)*3);dataR_6=zeros(m,length(r0_6)*3);
 dataNI_6=zeros(m-10,length(r0_6)*3);dataRt_6=zeros(m,length(r0_6)*3);
@@ -387,31 +387,31 @@ for i=1:length(r0_6)
         dataNI_6(:,i+length(r0_6)*(j-1))=x(11:end,4)-x(1:m-10,4);
         for z=1:(m-1)
             if floor(dataRt_6(z,i+length(r0_6)*(j-1)))==1 && floor(dataRt_6(z+1,i+length(r0_6)*(j-1)))==0
-                MmdatacumIrate_6(1,i+length(r0_6)*(j-1))=(x(z,4)/Sr0_total)*100;%Rt=1Ê±Mechanism modelµÄÀÛ¼Æ¸ĞÈ¾ÂÊ%
+                MmdatacumIrate_6(1,i+length(r0_6)*(j-1))=(x(z,4)/Sr0_total)*100;%Rt=1æ—¶Mechanism modelçš„ç´¯è®¡æ„ŸæŸ“ç‡%
             end
         end
     end
    %Model 1
      XX0=[par2(1),par1(3),par2(2),5];
-     [t,xx]=ode45(@SIRmodel1,1:0.1:n,XX0,[],par1,par2);%Model 1 Î´ÓÃµ½par1(2)£¬ËùÒÔÕâÀïÖ±½Ó·Åpar1ÎŞÓ°Ïì
+     [t,xx]=ode45(@SIRmodel1,1:0.1:n,XX0,[],par1,par2);%Model 1 æœªç”¨åˆ°par1(2)ï¼Œæ‰€ä»¥è¿™é‡Œç›´æ¥æ”¾par1æ— å½±å“
      M1dataI_6(:,i)=xx(:,2);M1dataR_6(:,i)=xx(:,3);
      M1dataRt_6(:,i)=5*par1(1).*xx(:,1)./(xx(:,1)+xx(:,2)+xx(:,3));
      M1dataNI_6(:,i)=xx(11:end,4)-xx(1:m-10,4);
      
      for z=1:(m-1)
             if floor(M1dataRt_6(z,i))==1 && floor(M1dataRt_6(z+1,i))==0
-                M1datacumIrate_6(1,i)=(xx(z,4)/Sr0_total)*100;%Rt=1Ê±Model1µÄÀÛ¼Æ¸ĞÈ¾ÂÊ%
+                M1datacumIrate_6(1,i)=(xx(z,4)/Sr0_total)*100;%Rt=1æ—¶Model1çš„ç´¯è®¡æ„ŸæŸ“ç‡%
             end
      end
 
 end
 Mmattack_rate_6=dataR_6(end,:)./Sr0_total.*100;
 Mmpeak_size_rate_6=max(dataI_6,[],1)./Sr0_total.*100;
-Mmpeak_sizeNI_rate_6=max(dataNI_6,[],1)./Sr0_total.*100;%·µ»ØÃ¿ÁĞ×î´óÖµ
+Mmpeak_sizeNI_rate_6=max(dataNI_6,[],1)./Sr0_total.*100;%è¿”å›æ¯åˆ—æœ€å¤§å€¼
 
 M1attack_rate_6=M1dataR_6(end,:)./Sr0_total.*100;
 M1peak_size_rate_6=max(M1dataI_6,[],1)./Sr0_total.*100;
-M1peak_sizeNI_rate_6=max(M1dataNI_6,[],1)./Sr0_total.*100;%·µ»ØÃ¿ÁĞ×î´óÖµ
+M1peak_sizeNI_rate_6=max(M1dataNI_6,[],1)./Sr0_total.*100;%è¿”å›æ¯åˆ—æœ€å¤§å€¼
 
 
 figure
@@ -425,48 +425,48 @@ plot(r0_6,Mmattack_rate_6(1:length(r0_6)),'Color',[0 0.45 0.74],'LineWidth',1.5)
 plot(r0_6, Mmattack_rate_6(length(r0_6)+1:length(r0_6)*2),'Color',[0.85 0.33 0.1],'LineWidth',1.5)
 plot(r0_6,Mmattack_rate_6(length(r0_6)*2+1:length(r0_6)*3)','Color',[0.93 0.69 0.13],'LineWidth',1.5)
 plot(r0_6,M1attack_rate_6','k-','LineWidth',1.5)
-xlim([1.5 10]);ylim([0 100]);xlabel('R_0');ylabel('Rate/%');title('(a) Attack rate')
-set(gca,'XTick',[ 1.5 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
+xlim([1.4 10]);ylim([0 100]);xlabel('R_0');ylabel('Rate/%');title('(a) Attack rate')
+set(gca,'XTick',[ 1.4 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
 grid on
 grid minor
 hold off
 
 subplot(222)
-r0_6_0=round(1.5:0.5:10,2);pos=zeros(1,length(r0_6_0));%ÒÔ0.5Îª²½³¤»­Í¼
+r0_6_0=round(1.4:0.5:10,2);pos=zeros(1,length(r0_6_0));%ä»¥0.5ä¸ºæ­¥é•¿ç”»å›¾
 for i=1:length(r0_6_0)
 pos(i)=find(r0_6==r0_6_0(i));%
 end
 plot(r0_6_0,[MmdatacumIrate_6(pos)' MmdatacumIrate_6(pos+length(r0_6))' MmdatacumIrate_6(pos+length(r0_6)*2)'],r0_6_0,M1datacumIrate_6(pos),'k-','LineWidth',1.5)
-xlim([1.5 10]);ylim([0 100]);xlabel('R_0');ylabel('Rate/%');title('(b) Herd immunity')
-set(gca,'XTick',[ 1.5 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
+xlim([1.4 10]);ylim([0 100]);xlabel('R_0');ylabel('Rate/%');title('(b) Herd immunity')
+set(gca,'XTick',[ 1.4 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
 grid on
 grid minor
 
 subplot(223)
 plot(r0_6,[Mmpeak_size_rate_6(1:length(r0_6))' Mmpeak_size_rate_6(length(r0_6)+1:length(r0_6)*2)' Mmpeak_size_rate_6(length(r0_6)*2+1:length(r0_6)*3)'],r0_6,M1peak_size_rate_6,'k-','LineWidth',1.5)
-xlim([1.5 10]);ylim([0 70]);xlabel('R_0');ylabel('Rate/%');title('(c) Peak of infection class')
-set(gca,'XTick',[ 1.5 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
+xlim([1.4 10]);ylim([0 70]);xlabel('R_0');ylabel('Rate/%');title('(c) Peak of infection class')
+set(gca,'XTick',[ 1.4 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
 grid on
 grid minor
 
 
 subplot(224)
 plot(r0_6,[Mmpeak_sizeNI_rate_6(1:length(r0_6))' Mmpeak_sizeNI_rate_6(length(r0_6)+1:length(r0_6)*2)' Mmpeak_sizeNI_rate_6(length(r0_6)*2+1:length(r0_6)*3)'],r0_6,M1peak_sizeNI_rate_6,'k-','LineWidth',1.5)
-xlim([1.5 10]);ylim([0 50]);xlabel('R_0');ylabel('Rate/%');title('(d) Peak daily new infections')
-legend('k=0.15','k=0.0.2812','k=0.4','Model (1)','Location','northwest')
-set(gca,'XTick',[ 1.5 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
+xlim([1.4 10]);ylim([0 50]);xlabel('R_0');ylabel('Rate/%');title('(d) Peak daily new infections')
+legend('k=0.15','k=0.2812','k=0.4','Model (1)','Location','northwest')
+set(gca,'XTick',[ 1.4 3 5 7  8.5 10],'FontName','Times New Roman','FontSize',14);
 grid on
 grid minor
 
-set(gcf,'unit','centimeters','position',[10 10 20 15])%ÉèÖÃ´°¿ÚµÄ´óĞ¡£¬£¨10,10£©Æğµã×ø±ê£¬20¿í£¬15¸ß
+set(gcf,'unit','centimeters','position',[10 10 20 15])%è®¾ç½®çª—å£çš„å¤§å°ï¼Œï¼ˆ10,10ï¼‰èµ·ç‚¹åæ ‡ï¼Œ20å®½ï¼Œ15é«˜
 
 
 
 
 
 %%
-%Í¼3
-%ĞÂ·¢±¨µÀ-¸ĞÈ¾¼ä¸ô·Ö²¼ÄâºÏÍ¼ºÍĞÂ·¢¸ĞÈ¾Êı¾İÍ¼
+%å›¾3
+%æ–°å‘æŠ¥é“-æ„ŸæŸ“é—´éš”åˆ†å¸ƒæ‹Ÿåˆå›¾å’Œæ–°å‘æ„ŸæŸ“æ•°æ®å›¾
 interval=[0.5	0.5	0.5	0.5	0.5	0.5	0.5	0.5	0.5	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	1	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	2	3	3	3	4	4	5	5	5	5	5	5	5	6	6	6	6	6	6	6	6	6];
 interval_x=[0.5,1.5,2.5,3.5,4.5,5.5,6.5];
 interval_p=[9,34,29,3,2,7,9]./sum([9,34,29,3,2,7,9])
@@ -490,8 +490,8 @@ grid on
 grid minor
 
 %
-reported_case=xlsread('reported_case.xlsx');%ĞÂ·¢±¨µÀÊı¾İ
-%data1(2,:)';%ĞÂ·¢¸ĞÈ¾Êı¾İ
+reported_case=xlsread('reported_case.xlsx');%æ–°å‘æŠ¥é“æ•°æ®
+%data1(2,:)';%æ–°å‘æ„ŸæŸ“æ•°æ®
 
 subplot(122)
 plot(6:129,reported_case,'o','LineWidth',2,'MarkerSize',2,'Color',[.47 .67 .19])
